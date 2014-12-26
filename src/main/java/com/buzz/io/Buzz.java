@@ -9,14 +9,23 @@ package com.buzz.io;
 import com.buzz.buzzdata.DistanceUnits;
 import com.buzz.buzzdata.IBuzzDB;
 import com.buzz.buzzdata.MongoBuzz;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoException;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import org.bson.types.ObjectId;
 
 /**
  * REST Web Service
@@ -58,11 +67,12 @@ public class Buzz {
             @QueryParam("content") String content,
             @QueryParam("lat") Double lat, 
             @QueryParam("lng") Double lng, 
-            @QueryParam("tags") String tags) 
+            @QueryParam("tags") String tags,
+            @QueryParam("files_cs") String files_cs) 
             throws MongoException, UnknownHostException
     {
         String retval = "Success";
-        buzzDB.Insert(userid, header, content, lat, lng, tags);
+        buzzDB.Insert(userid, header, content, lat, lng, tags, files_cs.split(","));
         return retval;
     }
     
@@ -74,7 +84,7 @@ public class Buzz {
             @QueryParam("distance") double distance, 
             @QueryParam("units") String units,
             @QueryParam("tags") String tags) 
-            throws MongoException, UnknownHostException
+            //throws MongoException, UnknownHostException
     {
         String retval ="";
         DistanceUnits units_api = DistanceUnits.miles;
@@ -88,6 +98,16 @@ public class Buzz {
                 break;
         }
         retval = buzzDB.SearchByLocation(lat, lng, distance, units_api, tags);
+        return retval;
+    }
+    
+    @GET
+    @Path("Image")
+    @Produces("image/jpg")
+    public InputStream GetBuzzImage(@QueryParam("buzzid") String buzzid, 
+            @QueryParam("pic_num") String pic_num) throws FileNotFoundException
+    {
+        InputStream retval = buzzDB.GetImgByBuzz(buzzid, Integer.parseInt(pic_num));
         return retval;
     }
 }
