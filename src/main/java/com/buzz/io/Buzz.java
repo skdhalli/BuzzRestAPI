@@ -9,23 +9,17 @@ package com.buzz.io;
 import com.buzz.buzzdata.DistanceUnits;
 import com.buzz.buzzdata.IBuzzDB;
 import com.buzz.buzzdata.MongoBuzz;
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoException;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
-import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import org.bson.types.ObjectId;
 
 /**
  * REST Web Service
@@ -45,7 +39,7 @@ public class Buzz {
      * @throws java.net.UnknownHostException
      */
     public Buzz() throws UnknownHostException {
-       buzzDB = new MongoBuzz("162.219.245.33", 27017, "Buzz", "admin", "qNjneHcKyl");
+       buzzDB = new MongoBuzz("ds027771.mongolab.com", 27771, "buzz", "developer", "developer");
     }
 
     /**
